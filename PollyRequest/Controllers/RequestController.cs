@@ -38,8 +38,7 @@ namespace PollyRequest.Properties
 
             //Approach 6: Advanced Circuit Breaker Policy
             HttpClient client = new HttpClient();
-            ClientPolicy policy = new ClientPolicy();
-            HttpResponseMessage response = await policy.AdvancedCircuitBreakerPolicy.ExecuteAsync(() => client.GetAsync("http://localhost:5089/Hello"));
+            HttpResponseMessage response = await ClientPolicy.AdvancedCircuitBreakerPolicy.ExecuteAsync(() => client.GetAsync("http://localhost:5089/Hello"));
 
             if (response.IsSuccessStatusCode)
             {

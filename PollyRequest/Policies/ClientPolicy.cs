@@ -3,19 +3,19 @@ using Polly.CircuitBreaker;
 using Polly.Retry;
 namespace PollyRequest.Policies
 {
-    public class ClientPolicy
+    public static class ClientPolicy
     {
-        public AsyncRetryPolicy<HttpResponseMessage> ImmediateRetryPolicy { get; }
-        public AsyncRetryPolicy<HttpResponseMessage> EqualTimeDelayRetryPolicy { get; }
-        public AsyncRetryPolicy<HttpResponseMessage> ExpTimeDelayRetryPolicy { get; }
+        public static AsyncRetryPolicy<HttpResponseMessage> ImmediateRetryPolicy { get; }
+        public static AsyncRetryPolicy<HttpResponseMessage> EqualTimeDelayRetryPolicy { get; }
+        public static AsyncRetryPolicy<HttpResponseMessage> ExpTimeDelayRetryPolicy { get; }
 
 
-        public AsyncCircuitBreakerPolicy<HttpResponseMessage> SimpleCircuitBreakerPolicy { get; }
+        public static AsyncCircuitBreakerPolicy<HttpResponseMessage> SimpleCircuitBreakerPolicy { get; }
 
-        public AsyncCircuitBreakerPolicy<HttpResponseMessage> AdvancedCircuitBreakerPolicy { get; }
+        public static AsyncCircuitBreakerPolicy<HttpResponseMessage> AdvancedCircuitBreakerPolicy { get; }
 
 
-        public ClientPolicy()
+        static ClientPolicy()
         {
             ImmediateRetryPolicy = Policy.HandleResult<HttpResponseMessage>(res => !res.IsSuccessStatusCode)
                 .RetryAsync(3);
@@ -44,17 +44,17 @@ namespace PollyRequest.Policies
                 .AdvancedCircuitBreakerAsync(0.30, TimeSpan.FromSeconds(60), 9, TimeSpan.FromSeconds(30));
         }
 
-        private void OnHalfOpen()
+        private static void OnHalfOpen()
         {
             Console.WriteLine("Circuit in test mode, one request will be allowed.");
         }
 
-        private void OnReset()
+        private static void OnReset()
         {
             Console.WriteLine("Circuit closed, requests flow normally.");
         }
 
-        private void OnBreak(DelegateResult<HttpResponseMessage> result, TimeSpan ts)
+        private static void OnBreak(DelegateResult<HttpResponseMessage> result, TimeSpan ts)
         {
             Console.WriteLine("Circuit cut, requests will not flow.");
         }
